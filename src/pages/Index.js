@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Index(props) {
   // state to hold formData
@@ -7,26 +7,30 @@ function Index(props) {
     name: "",
     image: "",
     title: "",
-  })
+  });
 
   // handleChange function for form
   const handleChange = (event) => {
+    //  blocked typing in input if user not auth
+    if (!props.user) return;
     setNewForm((prevState) => ({
       ...prevState,
       [event.target.name]: event.target.value,
-    }))
-  }
+    }));
+  };
 
   // handle submit function for form
   const handleSubmit = (event) => {
-    event.preventDefault()
-    props.createPeople(newForm)
+    // blocked submit
+    if (!props.user) return;
+    event.preventDefault();
+    props.createPeople(newForm);
     setNewForm({
       name: "",
       image: "",
       title: "",
-    })
-  }
+    });
+  };
 
   // loaded function
   const loaded = () => {
@@ -38,12 +42,12 @@ function Index(props) {
         <img src={person.image} alt={person.name} />
         <h3>{person.title}</h3>
       </div>
-    ))
-  }
+    ));
+  };
 
   const loading = () => {
-    return <h1>Loading...</h1>
-  }
+    return <h1>Loading...</h1>;
+  };
 
   return (
     <section>
@@ -69,11 +73,11 @@ function Index(props) {
           placeholder="title"
           onChange={handleChange}
         />
-        <input type="submit" value="Create Person" />
+        <input disabled={!props.user} type="submit" value="Create Person" />
       </form>
       {props.people ? loaded() : loading()}
     </section>
-  )
+  );
 }
 
-export default Index
+export default Index;
