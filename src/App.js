@@ -7,6 +7,8 @@ import Main from "./components/Main";
 
 function App() {
   const [user, setUser] = useState(null);
+
+  
   useEffect(() => {
     auth.onAuthStateChanged((user) => setUser(user));
   }, []);

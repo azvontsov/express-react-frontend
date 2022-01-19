@@ -6,8 +6,8 @@ import Show from "../pages/Show";
 function Main(props) {
   const [people, setPeople] = useState([]);
 
-  //   const URL = "http://localhost:3001/people/"
-  const URL = "https://mern-stack-az.herokuapp.com/people/";
+  const URL = "http://localhost:3001/people/";
+  // const URL = "https://mern-stack-az.herokuapp.com/people/";
 
   // retrieve all the people
   const getPeople = async () => {
@@ -18,9 +18,15 @@ function Main(props) {
   };
 
   const createPeople = async (person) => {
+    if (!props.user) return;
+    const token = await props.user.getIdToken();
+
     await fetch(URL, {
       method: "POST",
-      headers: { "Content-Type": "Application/json" },
+      headers: {
+        "Content-Type": "Application/json",
+        Authorization: "Bearer " + token,
+      },
       body: JSON.stringify(person),
     });
 
@@ -46,7 +52,11 @@ function Main(props) {
   };
 
   // run getPeople once when component is mounted
-  useEffect(() => getPeople(), []);
+  useEffect(() => {
+    if (props.user) {
+      getPeople();
+    }
+  }, [props.user]);
 
   return (
     <main>
